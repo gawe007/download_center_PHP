@@ -55,8 +55,8 @@ class user{
         $sql = "SELECT * FROM user WHERE id = ? LIMIT 1";
         try{
             $stmt = $this->conn->prepare($sql);
-            $stmt->bindParam("i", $this->id);
-            if($stmt->execute){
+            $stmt->bind_param("i", $this->id);
+            if($stmt->execute()){
                 while($data = $stmt->get_result()->fetch_array()){
                     $this->id = $data['id'];
                     $this->email = $data['email'];
@@ -65,25 +65,28 @@ class user{
                     $this->timestamp = $data['timestamp'];
                 }
             }
+            $stmt->close();
         }catch (Exception $e) {
             throw new ErrorException($e->getMessage());
         }
     }
 
     public function user_check($email, $pass): bool{
-        $sql = "SELECT password FROM user WHERE email = ? LIMIT 1";
+        $sql = "SELECT * FROM user WHERE email = ? LIMIT 1";
         try{
             $stmt = $this->conn->prepare($sql);
-            $stmt->bindParam("s", $email);
-            if($stmt->execute){
-                while($data = $stmt->get_result()->fetch_array()){
+            $stmt->bind_param("s", $email);
+            if($stmt->execute()){
+                $result = $stmt->get_result();
+                if($data = $result->fetch_assoc()){
                     $password = $data['password'];
-                }
-
-                if(password_verify(self::hashPassword($pass), $password)){
-                    return true;
+                    if(password_verify($pass, $password)){
+                        $stmt->close();
+                        return $data['id'];
+                    }
                 }
             }
+            $stmt->close();
             return false;
         }catch (Exception $e) {
             throw new ErrorException($e->getMessage());
@@ -95,10 +98,11 @@ class user{
         $sql = "UPDATE user SET email = ?, password = ?, name = ?, WHERE id = ?";
         try{
             $stmt = $this->conn->prepare($sql);
-            $stmt->bindParam("sssi", $this->email, $this->password, $this->name, $this->id);
-            if($stmt->execute){
+            $stmt->bind_param("sssi", $this->email, $this->password, $this->name, $this->id);
+            if($stmt->execute()){
                 return true;
             }
+            $stmt->close();
             return false;
         }catch (Exception $e) {
             throw new ErrorException($e->getMessage());
@@ -110,10 +114,11 @@ class user{
         $sql = "DELETE FROM  user WHERE id = ?";
         try{
             $stmt = $this->conn->prepare($sql);
-            $stmt->bindParam("i", $this->id);
-            if($stmt->execute){
+            $stmt->bind_param("i", $this->id);
+            if($stmt->execute()){
                 return true;
             }
+            $stmt->close();
             return false;
         }catch (Exception $e) {
             throw new ErrorException($e->getMessage());
@@ -126,12 +131,13 @@ class user{
         $sql = "INSERT INTO user (email, password, name) VALUES (?, ?, ?)";
         try{
             $stmt = $this->conn->prepare($sql);
-            $stmt->bindParam("sss", $this->email, $this->password, $this->name);
-            if(!$stmt->execute){
+            $stmt->bind_param("sss", $this->email, $this->password, $this->name);
+            if(!$stmt->execute()){
                 throw new ErrorException($stmt->error . " " . E_USER_ERROR);
             }else{
                 $this->last_insert_id = $this->conn->insert_id;
             }
+            $stmt->close();
         }catch (Exception $e) {
             throw new ErrorException($e->getMessage());
         }

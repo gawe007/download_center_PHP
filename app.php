@@ -9,8 +9,8 @@ class app {
     public function __construct($request)
     {
         $this->session = new session();
+        $this->session->startBasicSession();
         $this->request = $request ?? null;
-        $this->checkSession();
     }
 
     public function checkSession(): void{
@@ -25,6 +25,18 @@ class app {
         switch($page){
             case 'login' :
                 include("theme/login.php");
+                break;
+            case 'admin' :
+                $this->checkSession();
+                include("theme/admin.php");
+                break;
+            case 'user-admin' :
+                $this->checkSession();
+                include("theme/user-admin.php");
+                break;
+            case 'data-admin' :
+                $this->checkSession();
+                include("theme/data-admin.php");
                 break;
             default :
                 include("theme/home.php");

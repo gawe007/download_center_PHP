@@ -10,27 +10,29 @@
                 <input class="form-control mb-5 p-2 border border-primary border-1" id="email" type="email" name="email" placeholder="E-mail" maxlength="30" required/>
                 <input class="form-control mb-5 p-2 border border-primary border-1" id="password" type="password" name="password" placeholder="password" maxlength="20" required/>
                 <div class="d-flex align-items-end">
-                    <buton class="btn btn-lg btn-primary text-white" id="btnlogin" type="submit">Login</button>
+                    <button type="submit" class="btn btn-lg btn-primary text-white" id="btnlogin">Login</button>
                 </div>
         </form>
         <script type="text/javascript">
             $('#formLogin').on('submit', function(e){
                 e.preventDefault();
-                $('#btnLogin').html = "...";
+                $('#btnLogin').html("<span class='spinner-border' role='status' aria-hidden='true'></span>");
                 $.ajax({
                     type: "POST",
-                    url: 'bin/api_login.php',
+                    url: '<?= $_SESSION['full_url']?>/bin/api_login.php',
                     contentType: "application/json",
-                    data: JSON.stringify({email: $('#email').val(), password: $('#password').val()}),
+                    data: JSON.stringify({action: "login", data: { email: $('#email').val(), password: $('#password').val()}}),
                     success : function (response){
                         if(response.status){
-                            alert('login successfull');
-                        }else{
-                            alert('login failed')
+                            window.location = "<?= $_SESSION['full_url']?>/index.php?r=admin";
                         }
                     },
                     error : function(xhr, status, error){
-                        console.error('Api request Error');
+                       Swal.fire({
+                              icon: "error",
+                              title: "Error",
+                              text: "Login failed",
+                            });
                     }
                 });
             });

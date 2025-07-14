@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once("entity/user.php");
-
+require_once("config/config.php");
 class session {
     private $user;
 
@@ -12,13 +12,19 @@ class session {
 
     public function login($email, $pass): bool {
         try{
-            if($this->user->user_check($email, $pass)){
-                return true;
+            $id = $this->user->user_check($email, $pass);
+            if($id){
+                return $id;
             }
             return false;
         }catch(Exception $e){
             throw new ErrorException($e->getMessage());
         }
+    }
+
+    public function startBasicSession(): void{
+        $_SESSION['full_url'] = HOSTNAME_FULL_URL;
+        $_SESSION['domain'] = HOSTNAME_DOMAIN;
     }
 
     public function newSession($id): void{
@@ -38,5 +44,6 @@ class session {
     public function logout(): void {
         session_unset();
         session_destroy();
+        header("Location: ".HOSTNAME_FULL_URL."/index.php");
     }
 }

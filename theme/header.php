@@ -8,34 +8,14 @@
 
     <!-- ===============================================--><!--    Document Title--><!-- ===============================================-->
     <title>IMTEK Download Center</title>
-
-    <!-- ===============================================--><!--    Favicons--><!-- ===============================================-->
-    <link rel="apple-touch-icon" sizes="180x180" href="theme/pack/assets/img/favicons/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="theme/pack/assets/img/favicons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="theme/pack/assets/img/favicons/favicon-16x16.png">
-    <link rel="shortcut icon" type="image/x-icon" href="theme/pack/assets/img/favicons/favicon.ico">
-    <link rel="manifest" href="theme/pack/assets/img/favicons/manifest.json">
-    <meta name="msapplication-TileImage" content="theme/pack/assets/img/favicons/mstile-150x150.png">
     <meta name="theme-color" content="#ffffff">
 
     <!-- ===============================================--><!--    Stylesheets--><!-- ===============================================-->
-    <link rel="stylesheet" href="theme/pack/vendors/swiper/swiper-bundle.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&amp;family=Rubik:ital,wght@0,300..900;1,300..900family=Rubik:ital,wght@0,300..900;1,300..900&amp;display=swap" rel="stylesheet">
-    <link href="theme/pack/assets/css/theme.min.css" rel="stylesheet" id="style-default">
-    <link href="theme/pack/assets/css/user-rtl.min.css" rel="stylesheet" id="user-style-rtl">
-    <link href="theme/pack/assets/css/user.min.css" rel="stylesheet" id="user-style-default">
-    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
-    <script src="theme/pack/vendors/popper/popper.min.js"></script>
-    <script src="theme/script/jquery-3.7.1.min.js"></script>
-    <script src="theme/pack/vendors/bootstrap/bootstrap.min.js"></script>
-    <script src="theme/pack/vendors/is/is.min.js"></script>
-    <script src="theme/pack/vendors/countup/countUp.umd.js"></script>
-    <script src="theme/pack/vendors/swiper/swiper-bundle.min.js"></script>
-    <script src="theme/pack/vendors/lodash/lodash.min.js"></script>
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script>
-    <script src="theme/pack/assets/js/theme.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </head>
 
   <body>
