@@ -19,13 +19,12 @@
                 $('#btnLogin').html("<span class='spinner-border' role='status' aria-hidden='true'></span>");
                 $.ajax({
                     type: "POST",
-                    url: '<?= $_SESSION['full_url']?>/bin/api_login.php',
+                    url: '<?= $global['full_url']?>/bin/api_public.php',
                     contentType: "application/json",
+                    credentials: 'include',
                     data: JSON.stringify({action: "login", data: { email: $('#email').val(), password: $('#password').val()}}),
                     success : function (response){
-                        if(response.status){
-                            window.location = "<?= $_SESSION['full_url']?>/index.php?r=admin";
-                        }
+                            window.location = "<?= $global['full_url']?>/index.php?r=admin";
                     },
                     error : function(xhr, status, error){
                        Swal.fire({
