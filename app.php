@@ -67,6 +67,9 @@ class app {
             case 'login' :
                 include("theme/login.php");
                 break;
+            case 'files' :
+                include("theme/files.php");
+                break;
             case 'admin' :
                 $this->checkSession();
                 include("theme/admin.php");

@@ -22,8 +22,11 @@ include("header-public.php");
         <div class="col-sm-12 col-md-8 col-lg-8">
             <div class="row border border-left-1 border-right-1 border-secondary p-2">
                 <div class="col-sm-12 col-md-4 col-lg-3">
-                    <div class="d-flex justify-content-center align-items-center border border-1 border-primary" style="min-width: 100px; min-height: 100px;">
-
+                    <div class="d-flex justify-content-center align-items-center" style="min-width: 100px; min-height: 100px;">
+                        <?php
+                        $icon = getIconByExt($file->getExtension());
+                        echo "<span style='font-size: 4em'><i class='bi {$icon}'></i></span>";
+                        ?>
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-6 col-lg-9">
@@ -77,23 +80,67 @@ include("header-public.php");
                         <p class="display-6"><i class="bi bi-lock"></i> File Security</p>
                         <div class="row">
                             <div class="col-4 p-2">
-                                <p class="text-center">True File Name</p>
-                            </div>
-                            <div class="col-8 p-2">
-                                <p class="text-wrap text-center"><?= $file->getFileName()?></p>
-                            </div>
-                            <div class="col-4 p-2">
                                 <p class="text-center">sha256</p>
                             </div>
                             <div class="col-8 p-2">
-                                <p class="text-wrap overflow-hidden"><?= $file->getSha256()?></p>
+                                <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="copyInput" value="<?=$file->getSha256()?>" readonly>
+                                <button class="btn btn-outline-secondary" type="button" id="copyButton" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy to clipboard">
+                                    <i class="bi bi-clipboard"></i>
+                                </button>
+                                </div>
+                                <script type="text/javascript">
+                                    const copyBtn = document.getElementById('copyButton');
+                                    const copyInput = document.getElementById('copyInput');
+
+                                    // Initialize tooltip
+                                    const tooltip = new bootstrap.Tooltip(copyBtn);
+
+                                    copyBtn.addEventListener('click', function () {
+                                        // Copy to clipboard
+                                        navigator.clipboard.writeText(copyInput.value)
+                                            .then(() => {
+                                                tooltip.setContent({ '.tooltip-inner': 'Copied!' });
+                                                tooltip.show();
+
+                                                // Reset tooltip after a short delay
+                                                setTimeout(() => {
+                                                    tooltip.setContent({ '.tooltip-inner': 'Copy to clipboard' });
+                                                }, 1500);
+                                            })
+                                            .catch(err => {
+                                                console.error('Clipboard copy failed:', err);
+                                            });
+                                    });
+
+                                </script>
                             </div>
                             <div class="col-4 p-2">
                                 <p class="text-center">Integrity</p>
                             </div>
-                            <div class="col-8 p-2">
-                                <p class="text-center"><i class='bi bi-question'></i>Unknown</p>
+                            <div class="col-8 p-2" id="integrityContainer">
+                                <p class="text-center"><i class='bi bi-question'></i> Unknown  <button class="btn btn-sm btn-primary" id="btnCheckIntegrity">Check</button></p>
                             </div>
+                            <script type="text/javascript">
+                                $('#btnCheckIntegrity').on('click', function(){
+                                    $('#integrityContainer').empty();
+                                    const $spinner = $('<div class="d-flex justify-content-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>');
+                                    $('#integrityContainer').append($spinner);
+                                    let fileId = '<?=base64_encode($file->getId())?>';
+                                    $.ajax({
+                                                            type: "POST",
+                                                            url: '<?= $global['full_url']?>/bin/api_public.php',
+                                                            contentType: "application/json",
+                                                            data: JSON.stringify({ action:'verifyIntegrity', id: fileId }),                                            
+                                                            success: function (status) {
+                                                                $('#integrityContainer').empty().html('<span class="d-block text-center text-primary fw-bold"><i class="bi bi-file-check"></i> Ok!</span>');
+                                                            },
+                                                            error: function (status) {
+                                                                $('#integrityContainer').empty().html('<span class="d-block text-center text-danger fw-bold"><i class="bi bi-file-x"></i> Integrity Check Failed! Proceed at your own risk!</span>');
+                                                            }
+                                                        });
+                                })
+                            </script>
                         </div>
                     </div>
                 </div>
@@ -190,6 +237,7 @@ include("header-public.php");
                                                                     .removeClass('progress-bar-animated')
                                                                     .addClass('bg-primary')
                                                                     .text('Completed!');
+                                                                $('#divSuccess').removeClass('d-none').addClass('d-block');
 
                                                             },
                                                             error: function (xhr) {
@@ -311,7 +359,7 @@ include("header-public.php");
                                                                     .removeClass('progress-bar-animated')
                                                                     .addClass('bg-primary')
                                                                     .text('Completed!');
-
+                                                                $('#divSuccess').removeClass('d-none').addClass('d-block');
                                                             },
                                                             error: function (xhr) {
                                                                 $('#spinnerWrapper').remove();
@@ -344,6 +392,15 @@ include("header-public.php");
                 <div class="col-12 mb-2 p-2 mb-3">
                         <div id="loader">
                         </div>
+                </div>
+                <div class="col-12 mb-2 p-2 mb-3 d-none" id="divSuccess">
+                    <div class="display-5">Download Compelete!</div>
+                    <div class="text-center"><button class="btn btn-sm btn-primary" id="btnReload">Reload this page</button></div>
+                    <script tyep="text/javascript">
+                        $('#btnReload').on('click', function(){
+                           location.reload();
+                        });
+                    </script>
                 </div>
             </div>
         </div>

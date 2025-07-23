@@ -14,4 +14,16 @@ class FileService
         }
         return null;
     }
+
+    public function verifyIntegrity($file, $hashToCompare): bool{
+
+        $filePath = $this->getFilePath($file);
+        if (!is_file($filePath) || !is_readable($filePath)) {
+            return false; // Or throw an exception if preferred
+        }
+
+        $hash = hash_file("sha256", $filePath);
+
+        return hash_equals($hash, $hashToCompare);
+    }
 }

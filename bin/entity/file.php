@@ -382,6 +382,55 @@ class file{
         }
     }
 
+    public function getFiles($draw, $start, $length, $search, $order_col, $order_dir): array{
+        // Read parameters from DataTables
+        $columns = ['id', 'name', 'extension', 'categories', 'operating_system', 'version', 'publisher', 'information', 'architecture', 'downloaded_count']; // your actual table columns
+        $order_by = $columns[$order_col];
+
+        // Build query
+        $where = !empty($search) ? "AND (name LIKE '%$search%' OR categories LIKE '%$search%')" : "";
+        $order = "ORDER BY $order_by $order_dir";
+        $limit = "LIMIT $start, $length";
+
+        // Total records
+        $total = $this->conn->query("SELECT COUNT(*) as count FROM files")->fetch_assoc()['count'];
+
+        // Filtered records
+        $filtered_sql = "SELECT COUNT(*) as count FROM files WHERE deleted = '0' $where";
+        $filtered = $this->conn->query($filtered_sql)->fetch_assoc()['count'];
+
+        // Fetch data
+        $data_sql = "SELECT * FROM files WHERE deleted = 0 $where $order $limit";
+        $result = $this->conn->query($data_sql);
+        $data = [];
+        while ($row = $result->fetch_assoc()) {
+            $data[] = [$row['id'], $row['name'], $row['extension'], $row['categories'], $row['operating_system'], $row['version'], $row['publisher'], $row['information'], $row['architecture'], $row['downloaded_count']];
+        }
+
+        return [$data, $filtered, $total];
+    }
+
+    public function liveSearchFiles(string $search, int $limit = 10): array {
+        $searchTerm = "%{$search}%";
+        $stmt = $this->conn->prepare("
+            SELECT id, name, extension, categories 
+            FROM files 
+            WHERE deleted = 0 AND (name LIKE ? OR categories LIKE ?) 
+            ORDER BY name ASC 
+            LIMIT ?
+        ");
+        $stmt->bind_param("ssi", $searchTerm, $searchTerm, $limit);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        $matches = [];
+        while ($row = $result->fetch_assoc()) {
+            $matches[] = $row;
+        }
+        
+        return $matches;
+    }
+
     public function getAllFilesNotDeleted(): array{
         $data = [];
         $sql = "SELECT * FROM files WHERE deleted = 0";
@@ -427,4 +476,5 @@ class file{
         }
         return $data;
     }
+
 }

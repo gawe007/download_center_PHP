@@ -20,3 +20,24 @@ function formatBytesHumanReadable($bytes, $decimals = 2) {
     return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . ' ' . $units[$factor];
 }
 
+function getIconByExt($extension){
+    $ext = strtolower(trim($extension));
+
+    // List of supported Bootstrap Icon filetypes
+    $supportedIcons = [
+        'csv', 'doc', 'docx', 'html', 'js', 'json', 'md',
+        'pdf', 'php', 'ppt', 'pptx', 'py', 'rb', 'svg',
+        'tsx', 'txt', 'xls', 'xlsx', 'xml', 'zip', 'exe', 'mp4', 
+        'ai', 'bmp', 'cs', 'css', 'gif', 'heic', 'java', 'jpg',
+        'jsx', 'key', 'm4p', 'mdx', 'mov', 'mp3', 'otf', 'png',
+        'psd', 'py', 'raw', 'sass', 'scss', 'sh', 'sql', 'tiff',
+        'ttf', 'wav', 'woff', 'yml'
+    ];
+
+    // Return matching Bootstrap icon class or fallback
+    return in_array($ext, $supportedIcons)
+        ? "bi-filetype-$ext"
+        : "bi-file-earmark-check";
+
+}
+
