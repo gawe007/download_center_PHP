@@ -61,6 +61,9 @@
         background-color: #f0f0f0;
       }
 
+      .offcanvas {
+        visibility: visible !important;
+      }
     </style>
   </head>
 

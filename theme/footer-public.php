@@ -84,18 +84,25 @@
               <div class="col-6 col-md-3">
                 <p class="mb-2 lh-lg">Popular Downloads</p>
                 <ul class="list-unstyled text-1100">
-                  <li class="mb-1"> <a class="ls-1 lh-xl link-footer" href="#!">Features</a></li>
-                  <li class="mb-1"> <a class="ls-1 lh-xl link-footer" href="#!"> Pricing</a></li>
-                  <li class="mb-1"> <a class="ls-1 lh-xl link-footer" href="#!"> News</a></li>
-                  <li class="mb-1"> <a class="ls-1 lh-xl link-footer" href="#!"> Help desk</a></li>
-                  <li class="mb-1"><a class="ls-1 lh-xl link-footer" href="#!"> Support</a></li>
+                  <?php
+                  require_once("bin/entity/file.php");
+                  $file = new file();
+                  $data = $file->getFilesFavourites();
+                  if(count($data) < 1){
+                    echo "<li class='mb-1'>Files Empty</li>";
+                  }else{
+                    foreach($data as $f){
+                      echo "<li class='mb-1'><div class='d-flex justify-content-between'><a class='text-light text-wrap' href='".$global['full_url']."/index.php?r=file-info&f=".base64_encode($f['id'])."'>".$f['name']."</a><span class='p-1 text-light overflow-hidden'><small>".$f['downloaded_count']."</small></span></div></li>";
+                    }
+                  }
+                  ?>
                 </ul>
               </div>
               <div class="col-6 col-md-3">
                 <p class="mb-2 lh-lg"> Legal</p>
                 <ul class="list-unstyled text-1100">
-                  <li class="mb-1"> <a class="ls-1 lh-xl link-footer" href="#!">Licence</a></li>
-                  <li class="mb-1"> <a class="ls-1 lh-xl link-footer" href="#!"> Terms & Conditions</a></li>
+                  <li class="mb-1"> <a class="ls-1 lh-xl link-footer" href="index.php?r=licence"> Licence</a></li>
+                  <li class="mb-1"> <a class="ls-1 lh-xl link-footer" href="index.php?r=terms"> Terms & Conditions</a></li>
                 </ul>
               </div>
               <div class="col-6 col-md-3 d-md-flex flex-column align-items-md-end pe-md-0 text-white">

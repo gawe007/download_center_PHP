@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('Asia/Jakarta');
 require_once("bin/session.php");
 class app {
     private $login_status;
@@ -38,24 +39,20 @@ class app {
                     return true;
                 }
                 return false;
-                exit();
             case 'admin':
                 if($this->global['session_user_level'] >= 2){
                     return true;
                 }
                 return false;
-                exit();
             default:
                 return false;
         }
     }
 
     public function handleClearance($clearance): void{
-        if(empty($clearance)){
-            $this->loadPage('admin');
-        }
-        if(!$this->checkClearance($clearance)){
-            $this->loadPage('admin');
+        if(empty($clearance) OR !$this->checkClearance($clearance)){
+            header("Location: index.php?r=admin"); // or wherever your router points
+            exit();
         }
     }
 
@@ -70,9 +67,17 @@ class app {
             case 'files' :
                 include("theme/files.php");
                 break;
+            case 'deleted-files':
+                $this->checkSession();
+                $this->handleClearance('system');
+                include("theme/deleted-files.php");
+                break;
             case 'admin' :
                 $this->checkSession();
                 include("theme/admin.php");
+                break;
+            case 'terms' :
+                include("theme/terms.php");
                 break;
             case 'user-admin' :
                 $this->checkSession();

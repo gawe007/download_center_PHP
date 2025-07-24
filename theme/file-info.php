@@ -14,7 +14,7 @@ include("header-public.php");
 <div class="container-fluid overflow-hidden">
 <div class="row flex-row">
     <div class="col-12 pt-5">
-        <div class="d-block text-center display-4">File Info</div>
+        <div class="d-block text-center display-4">Download File</div>
     </div>
         <div class="d-sm-none d-md-block col-md-2 col-lg-2">
 
@@ -147,7 +147,7 @@ include("header-public.php");
                 <div class="col-12 mb-2" id="lockContainer"></div>
                 <div class="col-12 mb-2 p-2">
                     <div class="bg-warning text-dark text-center">
-                        By Downloading this file, You are agreeing with our <a href="#">Terms and Conditions.</a>
+                        By Downloading this file, You are agreeing with our <a href="<?= $global['full_url']?>/index.php?r=terms">Terms and Conditions.</a>
                     </div>
                     <div class="p-4 text-center" id="downloadContainer">
                         <?php
@@ -166,7 +166,7 @@ include("header-public.php");
                                                         const spinnerWrapper = $(`
                                                             <div id="spinnerWrapper" class="text-center mb-3">
                                                                 <div class="spinner-border text-primary" role="status">
-                                                                    Downloading...
+                                                                    
                                                                 </div>
                                                             </div>
                                                         `);
@@ -284,7 +284,7 @@ include("header-public.php");
                                                         const spinnerWrapper = $(`
                                                             <div id="spinnerWrapper" class="text-center mb-3">
                                                                 <div class="spinner-border text-primary" role="status">
-                                                                    Downloading...
+                                                                    
                                                                 </div>
                                                             </div>
                                                         `);
@@ -394,7 +394,7 @@ include("header-public.php");
                         </div>
                 </div>
                 <div class="col-12 mb-2 p-2 mb-3 d-none" id="divSuccess">
-                    <div class="display-5">Download Compelete!</div>
+                    <div class="display-5 text-center mb-3">Download Complete!</div>
                     <div class="text-center"><button class="btn btn-sm btn-primary" id="btnReload">Reload this page</button></div>
                     <script tyep="text/javascript">
                         $('#btnReload').on('click', function(){

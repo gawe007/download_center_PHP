@@ -257,10 +257,10 @@ class file{
             throw new Error('Empty Reference');
             return;
         }
-        $sql = "UPDATE `files` SET `name` = ?, `categories`= ?, `operating_system`= ?, `version`= ?, `publisher`= ?, `publisher_link`= ?, `information`= ?, `architecture`=? WHERE id = ?";
+        $sql = "UPDATE `files` SET `name` = ?, `categories`= ?, `need_clearance`= ?, `clearance_level`= ?, `operating_system`= ?, `version`= ?, `publisher`= ?, `publisher_link`= ?, `information`= ?, `architecture`=? WHERE id = ?";
         try{
             $stmt = $this->conn->prepare($sql);
-            $stmt->bind_param("ssssssssi", $this->name, $this->categories, $this->operating_system, $this->version, $this->publisher, $this->publisher_link, $this->information, $this->architecture, $this->id);
+            $stmt->bind_param("ssiissssssi", $this->name, $this->categories, $this->need_clearance, $this->clearance_level, $this->operating_system, $this->version, $this->publisher, $this->publisher_link, $this->information, $this->architecture, $this->id);
             if(!$stmt->execute()){
                 $this->db_status = false;
                 throw new ErrorException($stmt->error);
@@ -279,6 +279,27 @@ class file{
             return;
         }
         $sql = "DELETE FROM files WHERE id = ?";
+        try{
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("i", $this->id);
+            if(!$stmt->execute()){
+                $this->db_status = false;
+                throw new ErrorException($stmt->error);
+            }else{
+                $this->db_status = true;
+            }
+            $stmt->close();
+        }catch (Exception $e) {
+            throw $e;
+        }
+    }
+
+    public function restore(){
+        if($this->id == 0){ 
+            throw new Error('Empty Reference');
+            return;
+        }
+        $sql = "UPDATE files SET deleted = FALSE WHERE id = ?";
         try{
             $stmt = $this->conn->prepare($sql);
             $stmt->bind_param("i", $this->id);
@@ -364,6 +385,7 @@ class file{
                     $this->file_size = $row['file_size'];
                     $this->sha256 = $row['sha256'];
                     $this->version = $row['version'];
+                    $this->operating_system = $row['operating_system'];
                     $this->categories = $row['categories'];
                     $this->need_clearance = $row['need_clearance'];
                     $this->clearance_level = $row['clearance_level'];
@@ -470,6 +492,46 @@ class file{
                     $data[] = $row;
                 }
             }
+            $stmt->close();
+        }catch (Exception $e) {
+            throw $e;
+        }
+        return $data;
+    }
+
+    public function getFilesFavourites(): array{
+        $data = [];
+        $sql = "SELECT id, name, downloaded_count FROM files ORDER BY downloaded_count DESC LIMIT 5";
+        try{
+            $stmt = $this->conn->prepare($sql);
+            if(!$stmt->execute()){
+                $this->db_status = false;
+                $this->db_error = $stmt->error;
+                throw new ErrorException($stmt->error);
+            }
+            $this->db_status = true;
+            $d = $stmt->get_result();
+            $data = $d->fetch_all(MYSQLI_ASSOC);
+            $stmt->close();
+        }catch (Exception $e) {
+            throw $e;
+        }
+        return $data;
+    }
+
+    public function getNewestFile(): array{
+        $data = [];
+        $sql = "SELECT * FROM files ORDER BY id DESC LIMIT 1";
+        try{
+            $stmt = $this->conn->prepare($sql);
+            if(!$stmt->execute()){
+                $this->db_status = false;
+                $this->db_error = $stmt->error;
+                throw new ErrorException($stmt->error);
+            }
+                $this->db_status = true;
+                $d = $stmt->get_result();
+                $data = $d->fetch_all(MYSQLI_ASSOC);
             $stmt->close();
         }catch (Exception $e) {
             throw $e;

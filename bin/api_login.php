@@ -3,8 +3,16 @@ session_start();
 require_once("session.php");
 require_once("entity/user.php");
 require_once("entity/file.php");
+require_once("fileService.php");
 $session = new session();
-$session->loadSessionById($_SESSION['session_id']);
+try{
+    $session->loadSessionById($_SESSION['session_id']);
+}catch(Exception $e){
+    http_response_code(401);
+    echo json_encode('Session Timed Out');
+    exit;
+}
+
 $session_global = $session->getGlobal();
 
 header("Access-Control-Allow-Origin: ".HOSTNAME_FULL_URL);
@@ -63,7 +71,7 @@ function checkLogin(){
 
 function checkAdmin(){
     global $session_global, $apiError;
-    if($session_global['session_user_level'] <= 1){
+    if($session_global['session_user_level'] < 2){
                 http_response_code(400);
                 $apiError['message'] = 'Insuficient Leverage.';
                 echo json_encode($apiError);
@@ -127,6 +135,63 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $error= $e->getMessage();
                 http_response_code(400);
                 echo json_encode(['status' => $status, 'message' => $error]);
+            }
+            break;
+        case 'loadFile':
+            checkLogin();
+            checkAdmin();
+            $id = base64_decode($data['id']);
+            try{
+                $file = new file();
+                $file->setId($id);
+                $file->load();
+                $d = [
+                    'name' => $file->getName(),
+                    'version' => $file->getVersion(),
+                    'needClearance' => $file->getNeedClearance(),
+                    'clearanceLevel' => $file->getClearanceLevel(),
+                    'categories' => $file->getCategories(),
+                    'os' => $file->getOS(),
+                    'architecture' => $file->getArchitecture(),
+                    'publisher' => $file->getPublisher(),
+                    'publisherLink' => $file->getPublisherLink(),
+                    'info' => $file->getInformation()
+                ];
+                http_response_code(200);
+                echo json_encode(['message' => "Load Success", 'data' => $d]);
+            }catch(Exception $e){
+                $error= $e->getMessage();
+                http_response_code(400);
+                echo json_encode(['message' => $error]);
+            }
+            break;
+        case 'updateFile':
+            checkLogin();
+            checkAdmin();
+            $d = $data['data'];
+            $needC = 0;
+            if(intval($d['clearanceLevel']) > 0){
+                $needC = 1;
+            }
+            try{
+                $file = new file();
+                $file->setId($d['id']);
+                $file->setName($d['name']);
+                $file->setVersion($d['version']);
+                $file->setCategories($d['categories']);
+                $file->setOS($d['os']);
+                $file->setNeedClearance($needC);
+                $file->setClearanceLevel(intval($d['clearanceLevel']));
+                $file->setArchitecture($d['architecture']);
+                $file->setPublisher($d['publisher']);
+                $file->setPublisherLink($d['publisherLink']);
+                $file->setInformation($d['info']);
+                $file->update();
+                http_response_code(200);
+                echo json_encode(['message' => 'Update Success']);
+            }catch(Exception $e){
+                http_response_code(400);
+                echo json_encode(['message' => 'Update Failed']);
             }
             break;
         case 'update_user_password':
@@ -213,6 +278,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             break;
         case 'add_file':
+            checkLogin();
+            checkAdmin();
             try{
                 $d = $data['data'];
                 $file = new file();
@@ -253,6 +320,96 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $error = $e->getMessage();
                 http_response_code(400);
                 echo json_encode(['status' => $status, 'message' => $error]);
+            }
+            break;
+        case 'restoreFile':
+            checkLogin();
+            checkSystem();
+            $id = intval(base64_decode($data['id']));
+            $fileService = new FileService();
+            $file = new file();
+            try{
+                $file->setId($id);
+                $file->load();
+                if($fileService->getFilePath($file->getFileName()) == null){
+                    http_response_code(400);
+                    exit(json_encode(['message' => "Failed to restore because the real file is not found."]));
+                }
+                $file->restore();
+                http_response_code(200);
+                echo json_encode(['message' => 'File restored.']);
+            }catch(Exception $e){
+                http_response_code(400);
+                echo json_encode(['message' => $e->getMessage()]);
+            }
+            break;
+        case 'deleteFile' :
+            $id = intval(base64_decode($data['id']));
+            $userID = $session_global['session_user_id'];
+            $userLevel = $session_global['session_user_level'];
+            if($userLevel < 2){
+                http_response_code(400);
+                           exit(json_encode(['message' => "You don't have the level needed for deleting this file."]));
+            }
+            $file = new file();
+            try{
+                $file->setId($id);
+                $file->load();
+                if($userLevel == 2){
+                    if($file->getIdUser() != $userID){
+                           http_response_code(400);
+                           exit(json_encode(['message' => "Only original uploader and system can delete this file."]));
+                    }
+                }
+                $file->softDelete();
+                http_response_code(200);
+                echo json_encode(['message' => 'File is deleted, you can restore the file from deleted files menu.']);
+            }catch(Exception $e){
+                http_response_code(400);
+                echo json_encode(['message' => $e->getMessage()]);
+            }
+            break;
+        case 'destroyFile' :
+            checkLogin();
+            checkSystem();
+            $id = intval(base64_decode($data['id']));
+            $fileService = new FileService();
+            $file = new file();
+            try{
+                $file->setId($id);
+                $file->load();
+                $unlink_error = "Real File Deleted";
+                if(!$fileService->deleteFile($file->getFileName())){
+                    $unlink_error = "Real File failed to be  deleted.";
+                }
+                $file->delete();
+                http_response_code(200);
+                echo json_encode(['message' => 'File is destroyed. '.$unlink_error]);
+            }catch(Exception $e){
+                http_response_code(400);
+                echo json_encode(['message' => $e->getMessage()]);
+            }
+            break;
+        case 'validateEdit' :
+            checkLogin();
+            checkAdmin();
+            $id = intval(base64_decode($data['id']));
+            try{
+                $file = new file();
+                $file->setId($id);
+                $file->load();
+                $owner = $file->getIdUser();
+                if($session_global['session_user_level'] == 2){
+                    if($session_global['session_user_id'] != $owner){
+                        http_response_code(403);
+                        exit(json_encode(['message' => "Only original uploader and system can update this file."]));
+                    }
+                }
+                http_response_code(200);
+                echo json_encode(['message' => "Validated"]);
+            }catch(Exception $e){
+                http_response_code(403);
+                echo json_encode(['message' => $e->getMessage()]);
             }
             break;
         default:

@@ -1,9 +1,6 @@
 <div class="container-fluid">
     <?php include("offcanvas-adminmenu.php"); ?>
     <section class="row">
-        <div class="d-none d-md-block col-md-2 overflow-hidden position-relative">
-            <?php include("sidemenu-admin.php");?>
-        </div>
         <div class="col-12 col-md-10 p-3" style="min-width: 0; flex: 1 1 auto;">
             <?php include("header-admin.php")?>
             <div class="d-block">
@@ -40,6 +37,9 @@
                     echo "</tbody>";
                     ?>
                 </table>
+                <small>
+                    User Deletion can only be done directly on the DB.
+                </small>
 
                 <div id="modalAdd" class="modal" tabindex="-1">
                 <div class="modal-dialog">

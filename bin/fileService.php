@@ -19,11 +19,25 @@ class FileService
 
         $filePath = $this->getFilePath($file);
         if (!is_file($filePath) || !is_readable($filePath)) {
-            return false; // Or throw an exception if preferred
+            return false;
         }
 
         $hash = hash_file("sha256", $filePath);
 
         return hash_equals($hash, $hashToCompare);
+    }
+
+    public function deleteFile($fileName): bool{
+        $filePath = $this->getFilePath($fileName);
+        if($filePath == null){
+            return false;
+        }
+        if (!is_file($filePath) || !is_readable($filePath)) {
+            return false;
+        }
+        if(!unlink($filePath)){
+            return false;
+        }
+        return true;
     }
 }

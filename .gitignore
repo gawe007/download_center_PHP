@@ -1,0 +1,5 @@
+# Ignore all content inside `storage`
+storage/*
+
+# Except this hidden file to keep the folder
+!storage/.gitkeep

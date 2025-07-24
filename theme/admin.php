@@ -1,9 +1,7 @@
 <div class="container-fluid">
+    <?php include("offcanvas-adminmenu.php"); ?>
 <section class="row">
-<div class="col-2">
-<?php include("sidemenu-admin.php");?>
-</div>
-<div class="col-10 p-2">
+<div class="col-12 p-2">
     <?php include("header-admin.php")?>
     <div class="d-block">
         <p class="display-3">Dashboard</p>
