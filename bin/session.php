@@ -242,7 +242,7 @@ class session {
         if(empty($auth_token)) return false;
         try{
             $stmt = $this->conn->prepare($sql);
-            $stmt->bind_param("i", $auth_token);
+            $stmt->bind_param("s", $auth_token);
             if(!$stmt->execute()){
                 throw new ErrorException($stmt->error . " " . E_USER_ERROR);
             }else{
