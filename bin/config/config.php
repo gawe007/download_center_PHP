@@ -33,4 +33,6 @@ define('APP_CONFIGURED_FOR', 'myInstitution/domain');
 
 define('APP_TYPE', 'Modular, Session Aware PHP Web App.');
 
+define('APP_VERSION', 'v.1.0.0');
+
 define('DB_ENGINE', 'MySql');

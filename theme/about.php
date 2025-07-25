@@ -18,7 +18,8 @@
                            <p> App Name : <?= APP_NAME?>.</p>
                             <p>Configured For : <?= APP_CONFIGURED_FOR?>.</p>
                             <p>Author : <?= APP_AUTHOR ?>.</p>
-                            <p>github : <a href="<?= APP_AUTHOR_CONTACT?>" target="_blank"><?= APP_AUTHOR_CONTACT?></a>.</p>
+                            <p>Github : <a href="<?= APP_AUTHOR_CONTACT?>" target="_blank"><?= APP_AUTHOR_CONTACT?></a>.</p>
+                            <p>Version : <?= APP_VERSION?></p>
                         
                         <?php
                             $Parsedown  = new Parsedown();
