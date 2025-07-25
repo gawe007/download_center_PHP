@@ -8,7 +8,7 @@ include("header-public.php");
       </div>
       <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
         <form id="formLogin" method="POST">
-                <input class="form-control mb-5 p-2 border border-primary border-1" id="email" type="email" name="email" placeholder="E-mail" maxlength="30" required/>
+                <input class="form-control mb-5 p-2 border border-primary border-1" id="email" type="email" name="email" placeholder="E-mail" maxlength="50" required/>
                 <input class="form-control mb-5 p-2 border border-primary border-1" id="password" type="password" name="password" placeholder="password" maxlength="20" required/>
                 <div class="d-flex align-items-end">
                     <button type="submit" class="btn btn-lg btn-primary text-white" id="btnlogin">Login</button>
