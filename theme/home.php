@@ -10,8 +10,7 @@ include("header-public.php");
     <div class="row justify-content-center align-items-center mb-5">
         <div class="col-sm-12 col-md-6">
             <div class="input-group">
-                <input type="text" id="searchQ" name="searchQ" class="form-control p-2" placeholder="Type Something" maxlength="100" required>
-                <button type="submit" class="btn btn-primary text-white"><i class="bi bi-search"></i></button>
+                <input type="text" id="searchQ" name="searchQ" class="form-control border border-1 border-primary p-2" placeholder="Type Something" maxlength="100" required>
             </div>
             <script type="text/javascript">
                 function filterDuplicates(data) {

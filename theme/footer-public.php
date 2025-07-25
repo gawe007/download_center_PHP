@@ -101,25 +101,24 @@
               <div class="col-6 col-md-3">
                 <p class="mb-2 lh-lg"> Legal</p>
                 <ul class="list-unstyled text-1100">
-                  <li class="mb-1"> <a class="ls-1 lh-xl link-footer" href="index.php?r=licence"> Licence</a></li>
                   <li class="mb-1"> <a class="ls-1 lh-xl link-footer" href="index.php?r=terms"> Terms & Conditions</a></li>
+                  <li class="mb-1"> <a class="ls-1 lh-xl link-footer" href="index.php?r=privacy"> Privacy Policy</a></li>
+                  <li class="mb-1"> <a class="ls-1 lh-xl link-footer" href="index.php?r=license"> License</a></li>
                 </ul>
               </div>
               <div class="col-6 col-md-3 d-md-flex flex-column align-items-md-end pe-md-0 text-white">
                 <div>
                   <p class="mb-2 lh-lg"> Contact Us</p>
                   <div class="mb-1 mb-lg-2">
-                      <b>IT Maintenance<b>
-                      <p class="text-wrap">Lt.4 - Fak. Teknik Universitas Pancasila</p>
+                      <b>My contact<b>
                   </div>
                 </div>
               </div>
             </div>
             <div class="row gy-2 py-3 justify-content-center justify-content-md-between">
               <div class="col-auto ps-0">
-                <p class="text-center text-md-start lh-xl text-1100"> © 2025 Copyright, All Right Reserved.</p>
+                <p class="text-center text-md-start lh-xl text-1100"> Copyright 2025 gawe007</p>
               </div>
-              <div class="col-auto pe-0"><a class="icons fs-8 me-3 me-md-0 ms-md-3 cursor-pointer" href="#!"><span class="uil uil-twitter"> </span></a><a class="icons fs-8 me-3 me-md-0 ms-md-3 cursor-pointer" href="#!"><span class="uil uil-instagram"></span></a><a class="icons fs-8 me-3 me-md-0 ms-md-3 cursor-pointer" href="#!"><span class="uil uil-linkedin"> </span></a></div>
             </div>
           </div>
         </footer>

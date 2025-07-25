@@ -201,7 +201,6 @@
 
                     $('#submitAddBtn').on('click', function(){
                         $(this).prop('disabled', true);
-                        let id = $('#userId').val();
                         let name = $('#userNameNew').val();
                         let email = $('#userEmailNew').val();
                         let password = $('#userPasswordNew').val();
@@ -214,7 +213,7 @@
                                 "Authorization": "Bearer " + token
                             },
                             credentials: 'include',
-                            data: JSON.stringify({action: "add_user", data: {level: level, id: id, name: name, email: email, password: password}}),
+                            data: JSON.stringify({action: "add_user", data: {level: level, name: name, email: email, password: password}}),
                             success : function (response){
                                 if(response.status){
                                     window.location.reload();

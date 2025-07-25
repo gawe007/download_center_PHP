@@ -204,6 +204,10 @@ class file{
     public function getDBerror(){
         return $this->db_error;
     }
+
+    public function getLastInsertId(){
+        return $this->last_insert_id;
+    }
     
     public function isSoftDeleted(){
         return $this->deleted;

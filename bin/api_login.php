@@ -4,6 +4,7 @@ require_once("session.php");
 require_once("entity/user.php");
 require_once("entity/file.php");
 require_once("fileService.php");
+require_once("entity/access_log.php");
 $session = new session();
 try{
     $session->loadSessionById($_SESSION['session_id']);
@@ -12,8 +13,6 @@ try{
     echo json_encode('Session Timed Out');
     exit;
 }
-
-$session_global = $session->getGlobal();
 
 header("Access-Control-Allow-Origin: ".HOSTNAME_FULL_URL);
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
@@ -51,6 +50,9 @@ if(count($s) < 1){
     exit;
 }
 
+$session_global = $session->getGlobal();
+$ac = new AcccesLog();
+$ac->setUserId($session_global['session_user_id']);
 
 if (base64_decode($token) !== $session_global['auth_token']) {
     http_response_code(403);
@@ -100,6 +102,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     switch ($data['action']) {
         case 'logout':
             checkLogin();
+            $ac->setAction('Logout from APP');
+            $ac->save();
             $session->logout();
             http_response_code(200);
             echo json_encode($apiSuccess);
@@ -128,6 +132,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $user->update();
                 $status = true;
                 $error = "";
+                $ac->setAction('Edit User id: '.$d['id']);
+                $ac->save();
                 http_response_code(200);
                 echo json_encode(['status' => $status, 'message' => $error]);
             }catch (Exception $e){
@@ -157,6 +163,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'publisherLink' => $file->getPublisherLink(),
                     'info' => $file->getInformation()
                 ];
+                $ac->setAction('Open File Properties: '.$id);
+                $ac->save();
                 http_response_code(200);
                 echo json_encode(['message' => "Load Success", 'data' => $d]);
             }catch(Exception $e){
@@ -187,6 +195,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $file->setPublisherLink($d['publisherLink']);
                 $file->setInformation($d['info']);
                 $file->update();
+                $ac->setAction('Update File Properties: '.$id);
+                $ac->save();
                 http_response_code(200);
                 echo json_encode(['message' => 'Update Success']);
             }catch(Exception $e){
@@ -206,6 +216,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if($user->update_password()){
                     $status = true;
                     $error = "";
+                    $ac->setAction('Update user passwird: '.$d['id']);
+                    $ac->save();
                     http_response_code(200);
                     echo json_encode(['status' => $status, 'message' => $error]);
                 }
@@ -259,8 +271,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             checkSystem();
             try{
                 $user = new user(null);
-                $user->setId($d['id']);
-                $user->load();
                 $user->setLevel($d['level']);
                 $user->setEmail($d['email']);
                 $user->setName($d['name']);
@@ -268,6 +278,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $user->save();
                 $status = true;
                 $error = "";
+                $ac->setAction('Add New User : '.$d['email']);
+                $ac->save();
                 http_response_code(200);
                 echo json_encode(['status' => $status, 'message' => $error]);
             }catch (Exception $e){
@@ -307,6 +319,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if($file->getDBstatus()){
                     $status = true;
                     $error = "";
+                    $ac->setAction('Add new file: '.$file->getLastInsertId());
+                    $ac->save();
                     http_response_code(200);
                     echo json_encode(['status' => $status, 'message' => $error]);
                     exit();
@@ -336,6 +350,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     exit(json_encode(['message' => "Failed to restore because the real file is not found."]));
                 }
                 $file->restore();
+                $ac->setAction('Restoring File: '.$id);
+                $ac->save();
                 http_response_code(200);
                 echo json_encode(['message' => 'File restored.']);
             }catch(Exception $e){
@@ -362,6 +378,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                 }
                 $file->softDelete();
+                $ac->setAction('Deleting File : '.$id);
+                $ac->save();
                 http_response_code(200);
                 echo json_encode(['message' => 'File is deleted, you can restore the file from deleted files menu.']);
             }catch(Exception $e){
@@ -383,6 +401,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $unlink_error = "Real File failed to be  deleted.";
                 }
                 $file->delete();
+                $ac->setAction('Destroying File: '.$id);
+                $ac->save();
                 http_response_code(200);
                 echo json_encode(['message' => 'File is destroyed. '.$unlink_error]);
             }catch(Exception $e){
@@ -411,6 +431,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 http_response_code(403);
                 echo json_encode(['message' => $e->getMessage()]);
             }
+            break;
+        case 'getLogs':
+            $draw = $data['draw'];
+            $start = $data['start'];
+            $length = $data['length'];
+            $search = $data['search']['value'];
+            $order_col = $data['order'][0]['column'];
+            $order_dir = $data['order'][0]['dir'];
+            $d = $ac->getLogs($draw, $start, $length, $search, $order_col, $order_dir);
+            $response = [
+                "draw" => intval($draw),
+                "recordsTotal" => $d['recordsTotal'],
+                "recordsFiltered" => $d['recordsFiltered'],
+                "data" => $d['data'],
+            ];
+            http_response_code(200);
+            echo json_encode($response);
             break;
         default:
             http_response_code(400);

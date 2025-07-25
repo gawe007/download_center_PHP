@@ -6,7 +6,7 @@
               <ul class="navbar-nav gap-md-2 gap-lg-3 pt-x1 pb-1 pt-md-0 pb-md-0" data-navbar-nav="data-navbar-nav">
                 <li class="nav-item"> <a class="nav-link lh-xl" href="<?= $global['full_url']?>">Home</a></li>
                 <li class="nav-item"> <a class="nav-link lh-xl" href="<?= $global['full_url']?>/index.php?r=files">Files</a></li>
-                <li class="nav-item"> <a class="nav-link lh-xl" href="#">About</a></li>
+                <li class="nav-item"> <a class="nav-link lh-xl" href="<?= $global['full_url']?>/index.php?r=about">About</a></li>
               </ul>
             </div>
           </div>

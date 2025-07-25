@@ -1,6 +1,7 @@
 <?php
 date_default_timezone_set('Asia/Jakarta');
 require_once("bin/session.php");
+require_once("bin/entity/access_log.php");
 class app {
     private $login_status;
     private $request;
@@ -21,6 +22,10 @@ class app {
 
     public function checkSession(): void{
         if(!$this->session->validateSession()){
+            $ac = new AcccesLog();
+            $ac->setUserId($this->global['session_user_id']);
+            $ac->setAction('Session timed out.');
+            $ac->save();
             $this->session->logout();
             $this->loadPage('login');
             exit();
@@ -64,6 +69,15 @@ class app {
             case 'login' :
                 include("theme/login.php");
                 break;
+            case 'about' :
+                include("theme/about.php");
+                break;
+            case 'license' :
+                include("theme/license.php");
+                break;
+            case 'privacy' :
+                include("theme/privacy.php");
+                break;
             case 'files' :
                 include("theme/files.php");
                 break;
@@ -71,6 +85,10 @@ class app {
                 $this->checkSession();
                 $this->handleClearance('system');
                 include("theme/deleted-files.php");
+                break;
+            case 'profile':
+                $this->checkSession();
+                include('theme/profile.php');
                 break;
             case 'admin' :
                 $this->checkSession();

@@ -3,7 +3,7 @@
             ☰ Menu
     </button>
     <div class="flex-fill">&nbsp;</div>
-    <span class="d-sm-none d-md-block"><?= $global['session_user_name']?></span>
+    <span class="username-span d-sm-none d-md-block"><?= $global['session_user_name']?></span>
     <div class="px-2">|</div>
     <?php
     $offsetSeconds = (int) (new DateTime())->getOffset(); // offset from GMT in seconds

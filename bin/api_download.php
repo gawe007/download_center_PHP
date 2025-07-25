@@ -4,6 +4,7 @@ require_once("session.php");
 require_once("entity/user.php");
 require_once("entity/file.php");
 require_once("fileService.php");
+require_once("entity/access_log.php");
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
@@ -40,6 +41,8 @@ if($file->getNeedClearance()){
     $session = new session();
     $session->loadSessionById($_SESSION['session_id']);
     $global = $session->getGlobal();
+    $ac = new AcccesLog();
+    $ac->setUserId($global['session_user_id']);
     $headers = getallheaders();
     $authHeader = isset($headers['Authorization']) ? $headers['Authorization'] : '';
 
@@ -65,6 +68,9 @@ if($file->getNeedClearance()){
             http_response_code(403);
             exit('Unauthorized');
         }
+
+        $ac->setAction('Download File: '.$fileID);
+        $ac->save();
 
     }
 $file->addDownloadCount();

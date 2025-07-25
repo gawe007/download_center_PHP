@@ -4,6 +4,7 @@ require_once("session.php");
 require_once("entity/user.php");
 require_once("entity/file.php");
 require_once("fileService.php");
+require_once("entity/access_log.php");
 $session = new session();
 
 header("Access-Control-Allow-Origin: ".HOSTNAME_FULL_URL);
@@ -37,6 +38,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if(!empty($id) && $id != 0){
                 $session->newSession($id);
                 $glb = $session->getGlobal();
+                $ac = new AcccesLog();
+                $ac->setUserId($id);
+                $ac->setAction('Login into APP');
+                $ac->save();
                 $url = 'home';
                 if($glb['session_user_level'] > 1){
                     $url = 'admin';

@@ -5,13 +5,10 @@ $maxfilesize = parseSizeToBytes(UPLOAD_MAX_SIZE);
 <div class="container-fluid">
     <?php include("offcanvas-adminmenu.php"); ?>
     <section class="row">
-        <div class="d-none d-md-block col-md-2 overflow-hidden position-relative">
-            <?php include("sidemenu-admin.php");?>
-        </div>
         <div class="col-12 col-md-10 p-3" style="min-width: 0; flex: 1 1 auto;">
             <?php include("header-admin.php")?>
             <div class="d-block">
-                <p class="display-3">Input New File</p>
+                <p class="display-3">New File</p>
                 <hr noshade/>
                 <div class="p-2">
                 <form id="formNewFile" enctype="multipart/form-data">

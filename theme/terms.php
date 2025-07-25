@@ -101,7 +101,7 @@ include("header-public.php");
           </h2>
           <div id="term7" class="accordion-collapse collapse" aria-labelledby="headingSeven" data-bs-parent="#termsAccordion">
             <div class="accordion-body">
-              Some data may be collected for operational and analytics purposes. Please refer to our <a href="#">Privacy Policy</a> for details.
+              Some data may be collected for operational and analytics purposes. Please refer to our <a href="<?= $global['full_url']?>/index.php?r=privacy">Privacy Policy</a> for details.
             </div>
           </div>
         </div>

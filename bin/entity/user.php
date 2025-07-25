@@ -154,7 +154,6 @@ class user{
     }
 
     public function save(): void{
-        $this->blockZero();
         if(!$this->checkEmpty()) die();
         $sql = "INSERT INTO user (email, password, name, level) VALUES (?, ?, ?, ?)";
         try{

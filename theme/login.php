@@ -1,7 +1,10 @@
+<?php 
+include("header-public.php");
+?>
 <section class="vh-100">
   <div class="container-fluid vh-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
-      <div class="col-md-9 col-lg-6 col-xl-5">
+      <div class="col-md-9 col-lg-6 col-xl-5 background-image-login">
       </div>
       <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
         <form id="formLogin" method="POST">
@@ -38,3 +41,6 @@
     </div>
   </div>
 </section>
+<?php
+include("footer-public.php");
+?>

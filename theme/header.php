@@ -4,13 +4,14 @@
   <meta charset='utf-8'>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="author" content="https://github.com/gawe007">
-  <meta name="description" content="Download Center by Gawe007 built for Teknik Univpancasila">
+  <meta name="author" content="<?= APP_AUTHOR_CONTACT ?>">
+  <meta name="description" content="Download Center by Gawe007 built for <?= APP_CONFIGURED_FOR ?>">
+
 
     <!-- ===============================================--><!--    Document Title--><!-- ===============================================-->
-    <title>Download Center - Teknik Univpancasila</title>
+    <title><?= APP_NAME ?> - <?= APP_CONFIGURED_FOR?></title>
     <meta name="theme-color" content="#fafafa">
-
+    <link rel="icon" type="image/x-icon" href="<?= htmlspecialchars($global['full_url']) ?>/theme/asset/ico.ico">
     <!-- ===============================================--><!--    Stylesheets--><!-- ===============================================-->
     <link href="<?= htmlspecialchars($global['full_url']) ?>/theme/style/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="<?= htmlspecialchars($global['full_url']) ?>/theme/style/bootstrap-icons.min.css">
@@ -64,6 +65,41 @@
       .offcanvas {
         visibility: visible !important;
       }
+
+      .background-image-login {
+        background-color: #f0f0f0;
+        background-image: url("theme/asset/ico.webp");
+        background-position: center;
+        background-size: contain;
+        background-repeat: no-repeat;
+        height: auto;
+        min-height: 400px;
+      }
+
+      .license-text {
+        white-space: pre-wrap;
+        word-break: break-word;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 0.95rem;
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 6px;
+        padding: 1rem;
+        max-height: 500px;
+        overflow-y: auto;
+      }
+
+      @media (max-width: 575.98px) {
+        .username-span {
+          display: none !important;
+        }
+      }
+
+      footer{
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        font-size: 14px;
+      }
+
     </style>
   </head>
 

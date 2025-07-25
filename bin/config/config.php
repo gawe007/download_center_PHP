@@ -22,3 +22,15 @@ define('BANNED_FILE_EXTENSION', ['php', 'c', 'vbs', 'dll', 'bat']);
 define('UPLOAD_MAX_SIZE', ini_get('upload_max_filesize'));
 
 define('POST_MAX_SIZE', ini_get('post_max_size'));
+
+define('APP_NAME', 'Download Center');
+
+define('APP_AUTHOR', 'Gemintang A. W.');
+
+define('APP_AUTHOR_CONTACT', 'github.com/gawe007');
+
+define('APP_CONFIGURED_FOR', 'myInstitution/domain');
+
+define('APP_TYPE', 'Modular, Session Aware PHP Web App.');
+
+define('DB_ENGINE', 'MySql');
